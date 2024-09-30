@@ -1,0 +1,103 @@
+<template>
+    <div id="map" ref="mapRef" class="container"></div>
+</template>
+
+<script setup lang="ts">
+    import { onMounted, ref } from 'vue';
+    import * as maptalks from "maptalks";
+
+    const mapRef = ref<HTMLDivElement>();
+
+    function initMap() {
+        
+
+  const map = new maptalks.Map("map", {
+    center: [-74.00912099912109, 40.71107610933129],
+    zoom: 15,
+    bearing: 157,
+    pitch: 80,
+    lights: {
+      directional: {
+        direction: [1, 0, -1],
+        color: [1, 1, 1],
+      },
+      ambient: {
+        resource: {
+          url: {
+            front: "{res}/hdr/gradient/front.png",
+            back: "{res}/hdr/gradient/back.png",
+            left: "{res}/hdr/gradient/left.png",
+            right: "{res}/hdr/gradient/right.png",
+            top: "{res}/hdr/gradient/top.png",
+            bottom: "{res}/hdr/gradient/bottom.png",
+          },
+          prefilterCubeSize: 32,
+        },
+        exposure: 1,
+        hsv: [0, 0.34, 0],
+        orientation: 0,
+      },
+    },
+  });
+
+  const style = [
+    {
+      filter: true,
+      renderPlugin: {
+        dataConfig: {
+          type: "point",
+        },
+        sceneConfig: {
+          collision: true,
+          fading: false,
+          depthFunc: "always",
+        },
+        type: "icon",
+      },
+      symbol: {
+        markerType: "ellipse",
+        markerFill: "#1bbc9b",
+        markerHeight: 21,
+        markerWidth: 21,
+      },
+    },
+  ];
+
+  const layer = new maptalks.GeoJSONVectorTileLayer("geo", {
+    data: "{res}/geojson/area.geojson",
+    style,
+  });
+
+  layer.on("dataload", (e) => {
+    map.fitExtent(e.extent);
+  });
+
+  const groupLayer = new maptalks.GroupGLLayer("group", [layer], {
+    sceneConfig: {
+      environment: {
+        enable: true,
+        mode: 1,
+        level: 0,
+        brightness: 0,
+      },
+    },
+  });
+  groupLayer.addTo(map);
+
+    }
+
+    onMounted(() => {
+        initMap();
+    });
+</script>
+
+<style>
+
+  @import 'https://esm.sh/maptalks/dist/maptalks.css';
+
+  .content {
+    width: 100%;
+    height: 450px;
+  }
+  
+</style>

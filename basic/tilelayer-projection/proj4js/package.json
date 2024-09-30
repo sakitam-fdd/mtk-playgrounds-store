@@ -1,0 +1,21 @@
+{
+  "name": "maptalks-starter",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.0",
+    "tweakpane": "latest",
+    "maptalks": "1.0.0-rc.37",
+    "proj4": "^2.12.1"
+  },
+  "devDependencies": {
+    "@types/proj4": "^2.5.5",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "vite": "^5.4.0"
+  }
+}
