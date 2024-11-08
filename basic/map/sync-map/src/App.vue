@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, onUnmounted, ref } from 'vue';
   import { Map, TileLayer, control } from 'maptalks';
 
   const map0Ref = ref<HTMLDivElement>();
@@ -62,23 +62,23 @@
         },
       ],
     }).addTo(map0);
+
+    return () => {
+      map0?.remove?.();
+      map1?.remove?.();
+    };
   }
 
   onMounted(() => {
-    initMap();
+    const dispose = initMap();
+    onUnmounted(() => {
+      dispose?.();
+    });
   });
 </script>
 
 <style>
   @import 'https://esm.sh/maptalks/dist/maptalks.css';
-
-  html, body, #app {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
 
   .content {
     width: calc(50% - 2px);

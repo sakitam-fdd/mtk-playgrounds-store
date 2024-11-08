@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, onUnmounted, ref } from 'vue';
   import { Map, TileLayer, VectorLayer } from 'maptalks';
 
   const mapRef = ref<HTMLDivElement>();
@@ -26,10 +26,18 @@
       }),
       layers: [new VectorLayer('v', [])],
     });
+
+    return () => {
+      map.remove();
+    };
   }
 
   onMounted(() => {
-    initMap();
+    const dispose = initMap();
+
+    onUnmounted(() => {
+      dispose?.();
+    });
   });
 </script>
 

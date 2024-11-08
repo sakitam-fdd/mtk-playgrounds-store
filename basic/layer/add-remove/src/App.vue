@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, onUnmounted, ref } from 'vue';
   import { Map, Marker, TileLayer, VectorLayer } from 'maptalks';
   import { Pane } from 'tweakpane';
 
@@ -43,6 +43,7 @@
     }
 
     const gui = new Pane();
+
     gui
       .addButton({
         title: 'Add Layer',
@@ -58,25 +59,24 @@
         .on('click', () => {
           map.removeLayer(layer);
         });
+
+    return () => {
+      map.remove();
+      gui.dispose();
+    };
   }
 
   onMounted(() => {
-    initMap();
+    const dispose = initMap();
+
+    onUnmounted(() => {
+      dispose();
+    });
   });
 </script>
 
 <style>
   @import 'https://esm.sh/maptalks/dist/maptalks.css';
-
-  html,
-  body,
-  #app {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
 
   .content {
     width: 100%;
