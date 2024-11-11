@@ -3,10 +3,11 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, onUnmounted } from 'vue';
   import { Map, SpatialReference, TileLayer } from 'maptalks';
 
   const mapRef = ref<HTMLDivElement>();
+  let map: Map;
 
   function initMap() {
     const arcUrl = 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer';
@@ -18,7 +19,7 @@
       const ref = conf.spatialReference;
       ref.projection = 'EPSG:3857';
       ref.fullExtent = null;
-      const map = new Map(mapRef.value!, {
+      map = new Map(mapRef.value!, {
         center: [121, 0],
         zoom: 1,
         minZoom: 1,
@@ -37,18 +38,16 @@
   onMounted(() => {
     initMap();
   });
+
+  onUnmounted(() => {
+    if (map) {
+      map.remove();
+    }
+  });
 </script>
 
 <style>
   @import 'https://esm.sh/maptalks/dist/maptalks.css';
-
-  html, body, #app {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
 
   .content {
     width: 100%;

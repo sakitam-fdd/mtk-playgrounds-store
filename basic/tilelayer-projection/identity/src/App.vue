@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, onUnmounted } from 'vue';
   import { Circle, LineString, Map, Marker, Rectangle, Sector, VectorLayer } from 'maptalks';
 
   const mapRef = ref<HTMLDivElement>();
@@ -130,25 +130,22 @@
     ];
 
     new VectorLayer('field', soccerField).addTo(map);
+
+    return () => {
+      map.remove();
+    };
   }
 
   onMounted(() => {
-    initMap();
+    const dispose = initMap();
+    onUnmounted(() => {
+      dispose();
+    });
   });
 </script>
 
 <style>
   @import 'https://esm.sh/maptalks/dist/maptalks.css';
-
-  html,
-  body,
-  #app {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
 
   .content {
     width: 100%;

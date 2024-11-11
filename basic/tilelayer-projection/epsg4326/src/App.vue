@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, onUnmounted } from 'vue';
   import { Map, TileLayer } from 'maptalks';
 
   const mapRef = ref<HTMLDivElement>();
@@ -20,28 +20,27 @@
       baseLayer: new TileLayer('base', {
         tileSystem: [1, -1, -180, 90],
         urlTemplate:
-          'https://t{s}.tianditu.gov.cn/vec_c/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=c&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=6901643c38b65f1f9770196343cf72b2',
+          'https://t{s}.tianditu.gov.cn/vec_c/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=c&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=43dc56f9516dfedb64196da436b6dec3',
         subdomains: ['1', '2', '3', '4', '5'],
         attribution: '&copy; <a target="_blank" href="http://www.tianditu.cn">Tianditu</a>',
       }),
     });
+
+    return () => {
+      map.remove();
+    };
   }
 
   onMounted(() => {
-    initMap();
+    const dispose = initMap();
+    onUnmounted(() => {
+      dispose();
+    });
   });
 </script>
 
 <style>
   @import 'https://esm.sh/maptalks/dist/maptalks.css';
-
-  html, body, #app {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
 
   .content {
     width: 100%;

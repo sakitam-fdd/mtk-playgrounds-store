@@ -10,14 +10,14 @@
 
   function initMap() {
     const url =
-      'https://t0.tianditu.gov.cn/vec_c/wmts?request=GetCapabilities&service=wmts&tk=6901643c38b65f1f9770196343cf72b2';
+      'https://t0.tianditu.gov.cn/vec_c/wmts?request=GetCapabilities&service=wmts&tk=43dc56f9516dfedb64196da436b6dec3';
 
     SpatialReference.loadWMTS(url, (err, conf) => {
       if (err) {
         throw new Error(err);
       }
       const params = conf[0];
-      params.urlTemplate += '&tk=6901643c38b65f1f9770196343cf72b2';
+      params.urlTemplate += '&tk=43dc56f9516dfedb64196da436b6dec3';
       let spatialReference = params.spatialReference;
       const tileLayer = new TileLayer('tilelayer', params);
       spatialReference = params.spatialReference;
@@ -38,14 +38,6 @@
 
 <style>
   @import 'https://esm.sh/maptalks/dist/maptalks.css';
-
-  html, body, #app {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
 
   .content {
     width: 100%;

@@ -11,7 +11,6 @@
     "d3": "7.9.0",
     "topojson": "3.0.2",
     "vue": "^3.4.0",
-    "tweakpane": "latest",
     "maptalks": "1.0.0-rc.37"
   },
   "devDependencies": {
