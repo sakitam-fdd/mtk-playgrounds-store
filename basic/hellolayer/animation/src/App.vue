@@ -1,29 +1,162 @@
 <template>
-    <div id="map" ref="mapRef" class="container"></div>
+  <div id="map" ref="mapRef" class="content"></div>
 </template>
 
 <script setup lang="ts">
-    import { onMounted, ref } from 'vue';
-    
+  import { onMounted, onUnmounted, ref } from 'vue';
+  import { Map, TileLayer, Layer, renderer, Coordinate } from 'maptalks';
 
-    const mapRef = ref<HTMLDivElement>();
+  const mapRef = ref<HTMLDivElement>();
 
-    function initMap() {
-        
+  function initMap() {
+    const map = new Map(mapRef.value, {
+      center: [-0.113049, 51.498568],
+      zoom: 14,
+      baseLayer: new TileLayer('base', {
+        urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+        subdomains: ['a', 'b', 'c', 'd'],
+        attribution:
+          "&copy; <a href='http://osm.org'>OpenStreetMap</a> contributors, &copy; <a href='https://carto.com/'>CARTO</a>",
+      }),
+    });
+
+    const options = {
+      animation: true,
+      // 默认颜色
+      color: ['Red', 'Blue', 'Green', 'Yellow'],
+      // 默认字体
+      font: '30px san-serif',
+    };
+
+    class HelloLayer extends Layer {
+      data: any;
+      // 构造函数
+      constructor(id, data?: any, options?: any) {
+        super(id, options);
+        this.data = data;
+      }
+
+      setData(data) {
+        this.data = data;
+        return this;
+      }
+
+      getData() {
+        return this.data;
+      }
     }
 
-    onMounted(() => {
-        initMap();
+    // 定义默认的图层配置属性
+    HelloLayer.mergeOptions(options);
+
+    class HelloLayerRenderer extends renderer.CanvasRenderer {
+      checkResources() {
+        // HelloLayer只是绘制文字, 没有外部图片, 所以返回空数组
+        return [];
+      }
+
+      draw() {
+        const colors = this.layer.options.color;
+        const now = Date.now();
+        const rndIdx = Math.round((now / 300) % colors.length),
+          color = colors[rndIdx];
+        const drawn = this._drawData(this.layer.getData(), color);
+        this._drawnData = drawn;
+        this.completeRender();
+      }
+
+      drawOnInteracting(evtParam) {
+        if (!this._drawnData || this._drawnData.length === 0) {
+          return;
+        }
+        const colors = this.layer.options.color;
+        const now = Date.now();
+        const rndIdx = Math.round((now / 300) % colors.length),
+          color = colors[rndIdx];
+        this._drawData(this._drawnData, color);
+      }
+
+      // drawOnIntearcting被略过时的回调函数
+      onSkipDrawOnInteracting() {}
+
+      //当animation为true时是动画图层, 返回true
+      needToRedraw() {
+        if (this.layer.options['animation']) {
+          return true;
+        }
+        return super.needToRedraw();
+      }
+
+      _drawData(data, color) {
+        if (!Array.isArray(data)) {
+          return;
+        }
+        const map = this.getMap();
+        // prepareCanvas是父类CanvasRenderer中的方法
+        // 用于准备canvas画布
+        // 如果canvas不存在时, 则创建它
+        // 如果canvas已存在, 则清空画布
+        this.prepareCanvas();
+        // this.context是渲染器canvas的CanvasRenderingContext2D
+        const ctx = this.context;
+        // 设置样式
+        ctx.fillStyle = color;
+        ctx.font = this.layer.options['font'];
+
+        const containerExtent = map.getContainerExtent();
+        const drawn = [];
+        data.forEach((d) => {
+          // 将中心点经纬度坐标转化为containerPoint
+          // containerPoint是指相对地图容器左上角的像素坐标.
+          const point = map.coordinateToContainerPoint(new Coordinate(d.coord));
+          // 如果绘制的点不在屏幕范围内, 则不做绘制以提高性能
+          if (!containerExtent.contains(point)) {
+            return;
+          }
+          const text = d.text;
+          const len = ctx.measureText(text);
+          ctx.fillText(text, point.x - len.width / 2, point.y);
+          drawn.push(d);
+        });
+
+        return drawn;
+      }
+    }
+
+    HelloLayer.registerRenderer('canvas', HelloLayerRenderer);
+
+    const layer = new HelloLayer('hello');
+    layer.setData([
+      {
+        coord: map.getCenter().toArray(),
+        text: 'Hello World',
+      },
+      {
+        coord: map.getCenter().add(0.01, 0.01).toArray(),
+        text: 'Hello World 2',
+      },
+    ]);
+    layer.addTo(map);
+
+    return () => {
+      map.remove();
+    };
+  }
+
+  onMounted(() => {
+    const dispose = initMap();
+
+    onUnmounted(() => {
+      dispose();
     });
+  });
 </script>
 
 <style>
-
   @import 'https://esm.sh/maptalks/dist/maptalks.css';
 
   .content {
     width: 100%;
-    height: 450px;
+    height: 100%;
   }
-  
 </style>
