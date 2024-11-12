@@ -26,7 +26,7 @@
     let pitch = 0,
       d = 'up',
       bearing = 0;
-    let paused = false;
+    let paused = true;
 
     changeView();
 
@@ -43,7 +43,7 @@
       }
       map.setPitch(pitch);
       map.setBearing(bearing++);
-      if (!paused) {
+      if (!paused && !import.meta.env.VITE_BUILD_THUMBNAIL) {
         requestAnimationFrame(changeView);
       }
     }
