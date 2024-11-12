@@ -77,6 +77,7 @@
 
     return () => {
       map.remove();
+      pane.dispose();
     };
   }
 
