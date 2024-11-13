@@ -4,7 +4,7 @@
     "vue/server-renderer": "https://play.vuejs.org/server-renderer.esm-browser.js",
     "d3": "https://esm.sh/d3",
     "topojson": "https://esm.sh/topojson",
-    "maptalks": "https://esm.sh/maptalks@1.0.0-rc.37"
+    "maptalks": "https://esm.sh/maptalks@1.0.0-rc.40"
   },
   "scopes": {}
 }

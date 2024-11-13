@@ -10,7 +10,7 @@
   "dependencies": {
     "vue": "^3.4.0",
     "tweakpane": "latest",
-    "maptalks": "1.0.0-rc.37"
+    "maptalks": "1.0.0-rc.40"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",

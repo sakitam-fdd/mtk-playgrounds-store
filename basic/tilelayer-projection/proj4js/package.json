@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "vue": "^3.4.0",
-    "maptalks": "1.0.0-rc.37",
+    "maptalks": "1.0.0-rc.40",
     "proj4": "^2.12.1"
   },
   "devDependencies": {
