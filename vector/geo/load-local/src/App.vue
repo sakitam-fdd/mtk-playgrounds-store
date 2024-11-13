@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
   import { onMounted, ref, onUnmounted } from 'vue';
-  import { Map, GeoJSONVectorTileLayer, GroupGLLayer } from 'maptalks-gl';
+  import { Map, GeoJSONVectorTileLayer, GroupGLLayer } from 'maptalks-gl/dist/maptalks-gl';
 
   const mapRef = ref<HTMLDivElement>();
 
@@ -22,12 +22,12 @@
         ambient: {
           resource: {
             url: {
-              front: 'http://examples.maptalks.com/resources/hdr/gradient/front.png',
-              back: 'http://examples.maptalks.com/resources/hdr/gradient/back.png',
-              left: 'http://examples.maptalks.com/resources/hdr/gradient/left.png',
-              right: 'http://examples.maptalks.com/resources/hdr/gradient/right.png',
-              top: 'http://examples.maptalks.com/resources/hdr/gradient/top.png',
-              bottom: 'http://examples.maptalks.com/resources/hdr/gradient/bottom.png',
+              front: 'https://blog.sakitam.com/mtk-playground/resources/hdr/gradient/front.png',
+              back: 'https://blog.sakitam.com/mtk-playground/resources/hdr/gradient/back.png',
+              left: 'https://blog.sakitam.com/mtk-playground/resources/hdr/gradient/left.png',
+              right: 'https://blog.sakitam.com/mtk-playground/resources/hdr/gradient/right.png',
+              top: 'https://blog.sakitam.com/mtk-playground/resources/hdr/gradient/top.png',
+              bottom: 'https://blog.sakitam.com/mtk-playground/resources/hdr/gradient/bottom.png',
             },
             prefilterCubeSize: 32,
           },
