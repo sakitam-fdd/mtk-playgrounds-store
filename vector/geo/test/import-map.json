@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "vue": "https://mtk-playground.vercel.app/src/views/Playground/vue-dev-proxy",
+    "vue/server-renderer": "https://mtk-playground.vercel.app/src/views/Playground/vue-server-renderer-dev-proxy",
+    "maptalks": "https://esm.sh/maptalks@1.0.0-rc.33"
+  },
+  "scopes": {}
+}
